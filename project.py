@@ -1,23 +1,39 @@
 from pico2d import *
+from beer import Beer
+import random
 
 WIDTH, HEIGHT = 1200, 700  # 화면 크기
 background_path = 'map.jpg'  # 배경 사진 파일 경로
 cursor_path = 'scope.png'  # 마우스 커서 이미지 파일 경로
-x_pos,y_pos = 0,0
+
+
+x_pos, y_pos = 0, 0
+beers = []  # 맥주병 객체들을 저장할 리스트
+beer_timer = 0
+beer_interval = 2  # 2초마다 맥주 생성
+
 def reset_world():
     global background, cursor
     background = load_image(background_path)
     cursor = load_image(cursor_path)
 
-
 def render_world(mx, my):
     clear_canvas()
     background.draw(WIDTH // 2, HEIGHT // 2, WIDTH, HEIGHT)
     cursor.draw(mx, my, 100, 50)  # 마우스 위치에 따라 커서 그리기
+
+    for beer in beers:
+        beer.draw()
+
     update_canvas()
 
+def generate_beer():
+    global beer_timer
+    beers.append(Beer(random.randint(0, WIDTH), random.randint(0, HEIGHT)))
+    beer_timer = get_time()
+
 def get_mouse_pos():
-    global x_pos,y_pos
+    global x_pos, y_pos
     x, y = x_pos, y_pos
     events = get_events()
     for event in events:
@@ -37,6 +53,11 @@ running = True
 while running:
     mx, my = get_mouse_pos()  # 마우스의 현재 위치 얻기
     render_world(mx, my)
+
+    # 2초마다 맥주 생성
+    if get_time() - beer_timer > beer_interval:
+        generate_beer()
+
     delay(0.01)
 
     events = get_events()
