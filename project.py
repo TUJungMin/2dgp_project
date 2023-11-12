@@ -31,12 +31,13 @@ def update_world():
     for beer in beers:
         beer.update()
 
-def remove_clicked_beers(mx, my):
+def handle_mouse_events(mx, my):
     global beers
     clicked_beers = [beer for beer in beers if beer.is_clicked(mx, my)]
-
     for clicked_beer in clicked_beers:
         beers.remove(clicked_beer)
+
+
 def generate_beer():
     global beer_timer
     direction = random.choice([1, 2])
@@ -45,6 +46,8 @@ def generate_beer():
     else:
         beers.append(Beer(WIDTH + 100, random.randint(400, HEIGHT), direction))
     beer_timer = get_time()
+
+
 def get_mouse_pos():
     global x_pos, y_pos
     x, y = x_pos, y_pos
@@ -77,9 +80,12 @@ while running:
     for event in events:
         if event.type == SDL_QUIT:
             running = False
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            running = False
         elif event.type == SDL_MOUSEBUTTONDOWN and event.button == SDL_BUTTON_LEFT:
             # 왼쪽 마우스 버튼 클릭 시 맥주병 제거
-            remove_clicked_beers(mx, my)
+            mx, my = get_mouse_pos()
+            handle_mouse_events(mx, my)
 
     delay(0.01)
 

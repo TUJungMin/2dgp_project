@@ -31,5 +31,7 @@ class Beer:
         self.time += 0.1  # 시간 증가
 
     def is_clicked(self, mx, my):
-        distance = sqrt((self.x - mx) ** 2 + (self.y - my) ** 2)
-        return distance <= 100
+        distance_x = abs(self.x - mx)
+        distance_y = abs(self.y - my)
+
+        return distance_x <= 75 and distance_y <= 50
