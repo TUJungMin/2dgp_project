@@ -14,19 +14,22 @@ class Beer:
         self.direction = direction
 
         if self.direction == 1:
-            self.initial_velocity = 1  # 초기 속도 (왼쪽에서 오른쪽으로)
+            self.initial_velocity_x = 1  # 초기 속도 (왼쪽에서 오른쪽으로)
+            self.initial_velocity_y = 10
         else:
-            self.initial_velocity = -1  # 초기 속도 (오른쪽에서 왼쪽으로)
+            self.initial_velocity_x = -1  # 초기 속도 (오른쪽에서 왼쪽으로)
+            self.initial_velocity_y = 10
 
     def draw(self):
         self.image.rotate_draw(radians(self.angle), self.x, self.y, 300, 100)
+        draw_rectangle(self.x - 25, self.y - 25, self.x + 25, self.y + 25)  # 바운딩 박스를 그립니다. (크기는 50x50)
 
     def update(self):
-        gravity = 0  # 중력 가속도를 0으로 설정하여 직선 운동으로 변경
+        gravity = 0.1  # 중력 가속도를 0으로 설정하여 직선 운동으로 변경
         angle_radians = radians(self.angle)
 
-        self.x += self.initial_velocity * cos(angle_radians) * self.time
-        self.y += self.initial_velocity * sin(angle_radians) * self.time - gravity * (self.time ** 2)
+        self.x += self.initial_velocity_x * cos(angle_radians) * self.time
+        self.y += self.initial_velocity_y * sin(angle_radians) * self.time - gravity * (self.time ** 2)
 
         self.time += 0.1  # 시간 증가
 
