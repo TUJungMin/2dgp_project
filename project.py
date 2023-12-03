@@ -3,23 +3,34 @@ from beer import Beer
 import random
 
 WIDTH, HEIGHT = 1200, 700  # 화면 크기
-background_path = 'map.jpg'  # 배경 사진 파일 경로
+map = 'map.jpg'  # 배경 사진 파일 경로
 cursor_path = 'scope.png'  # 마우스 커서 이미지 파일 경로
+start = 'startsscreen.png'  # 마우스 커서 이미지 파일 경로
+process = 0
+round  = 1
 
 x_pos, y_pos = 0, 0
 beers = []  # 맥주병 객체들을 저장할 리스트
 beer_timer = 0
 beer_interval = 1  # 1초마다 맥주 생성
-
+world = []
 def reset_world():
-    global background, cursor
-    background = load_image(background_path)
+    global process,background, cursor
+    background = load_image(start)
     cursor = load_image(cursor_path)
+    hide_cursor()
 
 def render_world(mx, my):
+    global process, background
     clear_canvas()
+
+    if process == 0:
+        background = load_image(start)
+    else:
+        background = load_image(map)
+
     background.draw(WIDTH // 2, HEIGHT // 2, WIDTH, HEIGHT)
-    cursor.draw(mx, my, 100, 50)  # 마우스 위치에 따라 커서 그리기
+    cursor.draw(mx, my, 100, 50)
 
     for beer in beers:
         beer.draw()
@@ -32,20 +43,26 @@ def update_world():
         beer.update()
 
 def handle_mouse_events(mx, my):
-    global beers
-    clicked_beers = [beer for beer in beers if beer.is_clicked(mx, my)]
-    for clicked_beer in clicked_beers:
-        beers.remove(clicked_beer)
+    global process
+    if process == 0 and (450 <= mx <= 750) and (100 <= my <= 200):
+        process = 1
+        #reset_world()
+    else:
+        clicked_beers = [beer for beer in beers if beer.is_clicked(mx, my)]
+        for clicked_beer in clicked_beers:
+            beers.remove(clicked_beer)
 
+MAX_BEER_COUNT = 10  # 최대 맥주 객체 개수
 
 def generate_beer():
-    global beer_timer
-    direction = random.choice([1, 2])
-    if direction == 1:
-        beers.append(Beer(-100, random.randint(400, HEIGHT), direction))
-    else:
-        beers.append(Beer(WIDTH + 100, random.randint(400, HEIGHT), direction))
-    beer_timer = get_time()
+    global beer_timer, round
+    if process == 1 and len(beers) < MAX_BEER_COUNT:  # process가 1이고 맥주 개수가 최대 개수보다 작을 때만 생성
+        direction = random.choice([1, 2])
+        if direction == 1:
+            beers.append(Beer(-100, random.randint(400, HEIGHT), direction, round))
+        else:
+            beers.append(Beer(WIDTH + 100, random.randint(400, HEIGHT), direction, round))
+        beer_timer = get_time()
 
 
 def get_mouse_pos():
@@ -60,6 +77,7 @@ def get_mouse_pos():
 
     return x, y
 
+
 open_canvas(WIDTH, HEIGHT)
 reset_world()
 
@@ -71,8 +89,9 @@ while running:
     render_world(mx, my)
 
     # 2초마다 맥주 생성
-    if get_time() - beer_timer > beer_interval:
-        generate_beer()
+    if(process != 0):
+        if get_time() - beer_timer > beer_interval:
+            generate_beer()
 
     update_world()
 
