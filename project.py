@@ -1,6 +1,7 @@
 from pico2d import *
 from beer import Beer
 import random
+from heart import Heart
 
 WIDTH, HEIGHT = 1200, 700  # 화면 크기
 map = 'map.jpg'  # 배경 사진 파일 경로
@@ -13,13 +14,22 @@ x_pos, y_pos = 0, 0
 beers = []  # 맥주병 객체들을 저장할 리스트
 beer_timer = 0
 beer_interval = 1  # 1초마다 맥주 생성
-world = []
+
+
+hearts = []  # 하트 객체들을 저장할 리스트
+heart_size = 50  # 하트 크기
+heart_padding = 10  # 하트 간격
+heart_count = 3
 def reset_world():
-    global process,background, cursor
+    global process, background, cursor
     background = load_image(start)
     cursor = load_image(cursor_path)
     hide_cursor()
 
+
+for i in range(heart_count):
+    heart = Heart(WIDTH - (i + 1) * (heart_size + heart_padding), HEIGHT - heart_size, heart_size)
+    hearts.append(heart)
 def render_world(mx, my):
     global process, background
     clear_canvas()
@@ -35,8 +45,12 @@ def render_world(mx, my):
     for beer in beers:
         beer.draw()
 
-    update_canvas()
+    # process가 1일 때, 화면 우측 상단에 하트 그리기
+    if process == 1:
+        for heart in hearts:
+            heart.draw(heart_count)
 
+    update_canvas()
 def update_world():
     global beers
     for beer in beers:
@@ -46,7 +60,7 @@ def handle_mouse_events(mx, my):
     global process
     if process == 0 and (450 <= mx <= 750) and (100 <= my <= 200):
         process = 1
-        #reset_world()
+        reset_world()
     else:
         clicked_beers = [beer for beer in beers if beer.is_clicked(mx, my)]
         for clicked_beer in clicked_beers:
@@ -76,6 +90,8 @@ def get_mouse_pos():
             break  # 마우스 이벤트를 하나만 처리하고 나머지 이벤트는 무시
 
     return x, y
+
+
 
 
 open_canvas(WIDTH, HEIGHT)
