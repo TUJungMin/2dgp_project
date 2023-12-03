@@ -20,7 +20,7 @@ class Beer:
 
     def draw(self):
         self.image.rotate_draw(radians(self.angle), self.x, self.y, 300, 100)
-        draw_rectangle(self.x - 25, self.y - 50, self.x + 25, self.y + 50)  # 바운딩 박스를 그립니다. (크기는 50x50)
+        #draw_rectangle(self.x - 25, self.y - 50, self.x + 25, self.y + 50)  # 바운딩 박스를 그립니다. (크기는 50x50)
 
     def update(self):
         gravity = 0.1  # 중력 가속도를 0으로 설정하여 직선 운동으로 변경
