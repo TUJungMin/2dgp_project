@@ -25,11 +25,9 @@ def reset_world():
     background = load_image(start)
     cursor = load_image(cursor_path)
     hide_cursor()
-
-
-for i in range(heart_count):
-    heart = Heart(WIDTH - (i + 1) * (heart_size + heart_padding), HEIGHT - heart_size, heart_size)
-    hearts.append(heart)
+    for i in range(heart_count):
+        heart = Heart(WIDTH - (i + 1) * (heart_size + heart_padding), HEIGHT - heart_size, heart_size)
+        hearts.append(heart)
 def render_world(mx, my):
     global process, background
     clear_canvas()
@@ -48,7 +46,7 @@ def render_world(mx, my):
     # process가 1일 때, 화면 우측 상단에 하트 그리기
     if process == 1:
         for heart in hearts:
-            heart.draw(heart_count)
+            heart.draw(1)
 
     update_canvas()
 def update_world():
@@ -57,14 +55,19 @@ def update_world():
         beer.update()
 
 def handle_mouse_events(mx, my):
-    global process
+    global process, hearts
+
     if process == 0 and (450 <= mx <= 750) and (100 <= my <= 200):
         process = 1
-        reset_world()
+        #reset_world()
     else:
         clicked_beers = [beer for beer in beers if beer.is_clicked(mx, my)]
-        for clicked_beer in clicked_beers:
-            beers.remove(clicked_beer)
+        if not clicked_beers and len(hearts) > 0:  # 맥주와 충돌하지 않았고, 하트가 남아있을 때만
+            hearts.pop()  # 하트를 제거
+        else:
+            for clicked_beer in clicked_beers:
+                beers.remove(clicked_beer)
+
 
 MAX_BEER_COUNT = 10  # 최대 맥주 객체 개수
 
