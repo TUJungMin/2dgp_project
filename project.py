@@ -46,14 +46,15 @@ def render_world(mx, my):
 
     background.draw(WIDTH // 2, HEIGHT // 2, WIDTH, HEIGHT)
 
-
-    for beer in beers:
-        beer.draw()
+    if process != 4:
+        for beer in beers:
+            beer.draw()
 
     # process가 1일 때, 화면 우측 상단에 하트 그리기
-    if process != 0:
+    if process != 0 and process != 4:
         for heart in hearts:
             heart.draw(1)
+
     cursor.draw(mx, my, 100, 50)
     update_canvas()
 def update_world():
@@ -89,14 +90,14 @@ def handle_mouse_events(mx, my):
 MAX_BEER_COUNT = 10  # 최대 맥주 객체 개수
 
 def generate_beer():
-    global beer_timer, round,current_beercount
-    if process!= 0 and current_beercount < beer_count[round]:  # process가 1이고 맥주 개수가 최대 개수보다 작을 때만 생성
+    global beer_timer, round, current_beercount
+    if process != 0 and process != 4 and current_beercount < beer_count[round]:
         direction = random.choice([1, 2])
         if direction == 1:
-            beers.append(Beer(-100, random.randint(400, HEIGHT), direction, process))
+            beers.append(Beer(-100, random.randint(400, HEIGHT), direction, round))
             current_beercount += 1
         else:
-            beers.append(Beer(WIDTH + 100, random.randint(400, HEIGHT), direction, process))
+            beers.append(Beer(WIDTH + 100, random.randint(400, HEIGHT), direction, round))
             current_beercount += 1
         beer_timer = get_time()
 
