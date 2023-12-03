@@ -2,6 +2,7 @@ from pico2d import *
 from beer import Beer
 import random
 from heart import Heart
+from gamesound import Gunsound,Bottlesound
 
 WIDTH, HEIGHT = 1200, 700  # 화면 크기
 map = 'map.jpg'  # 배경 사진 파일 경로
@@ -22,7 +23,7 @@ hearts = []  # 하트 객체들을 저장할 리스트
 heart_size = 50  # 하트 크기
 heart_padding = 10  # 하트 간격
 heart_count = 3
-
+collision = False
 
 def reset_world():
     global process, background, cursor
@@ -65,7 +66,7 @@ def update_world():
             beers.remove(beer)
 
 def handle_mouse_events(mx, my):
-    global process, hearts, current_beercount,round
+    global process, hearts, current_beercount,round,collision
 
     if process == 0 and (450 <= mx <= 750) and (100 <= my <= 200):
         process = 1
@@ -78,8 +79,10 @@ def handle_mouse_events(mx, my):
                 if len(hearts) == 0:  # 하트가 모두 사라졌을 때
                     process = 4
         else:
+
             for clicked_beer in clicked_beers:
                 beers.remove(clicked_beer)
+                collision = True
 
             if len(beers) == 0:  # 맥주가 모두 사라졌을 때
                 process +=1
@@ -144,6 +147,11 @@ while running:
             # 왼쪽 마우스 버튼 클릭 시 맥주병 제거
             mx, my = get_mouse_pos()
             handle_mouse_events(mx, my)
+            if(collision):
+                bottle_sound = Bottlesound()
+            else:
+                gun_sound = Gunsound()  # Gunsound 객체 생성
+            collision = False
 
     delay(0.01)
 
