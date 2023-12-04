@@ -10,8 +10,8 @@ from gun import Gun
 WIDTH, HEIGHT = 1200, 700  # 화면 크기
 map = 'map.jpg'  # 배경 사진 파일 경로
 cursor_path = 'scope.png'  # 마우스 커서 이미지 파일 경로
-start_screen = 'startsscreen.png'  # 마우스 커서 이미지 파일 경로
-start,gameclear,gameover = 0,4,5
+start_screen = 'startscreen.png'  # 마우스 커서 이미지 파일 경로
+start, gameclear, gameover = 0,4,5
 start_bgm = False
 gameover_screen = 'gameover.png'
 gameclear_screen = 'gameclear.png'
