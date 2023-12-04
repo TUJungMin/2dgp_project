@@ -3,7 +3,8 @@ from beer import Beer
 from cure import Cure
 import random
 from heart import Heart
-from gamesound import Gunsound,Bottlesound,BGM
+from gamesound import Gunsound,Bottlesound,BGM,Heal
+from score import Score
 import time
 
 WIDTH, HEIGHT = 1200, 700  # 화면 크기
@@ -24,8 +25,8 @@ beer_timer = 0
 cure_timer = 0
 beer_interval = 1  # 1초마다 맥주 생성
 cure_interval = 1  #
-#beer_count = [0,random.randint(10,15),random.randint(20,25),random.randint(25,30)]
-beer_count = [0,1,2,3]
+beer_count = [0,random.randint(8,15),random.randint(20,25),random.randint(25,30)]
+#beer_count = [0,1,2,3]
 current_beercount = 0
 current_curecount = 0
 
@@ -34,6 +35,7 @@ heart_size = 50  # 하트 크기
 heart_padding = 10  # 하트 간격
 heart_count = 3
 collision = 0
+
 
 def reset_world():
     global  background, cursor
@@ -69,15 +71,20 @@ def render_world(mx, my):
         for cure in cures:  # Cure 객체들 그리기
             cure.draw()
 
+        #if process != start:
+
+
     # process가 1일 때, 화면 우측 상단에 하트 그리기
     if process != start and process != gameover:
         for heart in hearts:
             heart.draw(1)
 
     cursor.draw(mx, my, 100, 50)
-    update_canvas()
+
 def update_world():
-    global beers,process,round,current_beercount,cures
+    global beers,process,round,current_beercount,cures,score
+
+
     for beer in beers:
         beer.update()
         if beer.x < -100 or beer.x > WIDTH + 100:
@@ -104,13 +111,12 @@ def show_image_for_time(image_path, duration):
         delay(0.01)
 def handle_mouse_events(mx, my):
     global process, hearts, current_beercount,round,collision
-
+    clicked_beers = [beer for beer in beers if beer.is_clicked(mx, my)]
+    clicked_cures = [cure for cure in cures if cure.is_clicked(mx, my)]
     if process == start and (450 <= mx <= 750) and (100 <= my <= 200):
         process = round
-
     else:
-        clicked_beers = [beer for beer in beers if beer.is_clicked(mx, my)]
-        clicked_cures = [cure for cure in cures if cure.is_clicked(mx, my)]
+
         if not clicked_beers and not clicked_cures and len(hearts) > 0:
             if process != start:
                 hearts.pop()
@@ -131,7 +137,7 @@ def handle_mouse_events(mx, my):
                     hearts.append(heart)
             if process != gameclear:
                 if len(beers) == 0 and current_beercount == beer_count[round]:  # 맥주가 모두 사라졌을 때
-                    if process != gameover:  # 프로세스가 4가 아닐 때에만 실행
+                    if process != gameover:  # 프로세스가 5가 아닐 때에만 실행
                         process += 1
                         if(round<3):
                             round += 1
@@ -190,7 +196,7 @@ def get_mouse_pos():
     return x, y
 
 def restart():
-    global  current_beercount, current_curecount,process,round, beers, cures
+    global  current_beercount, current_curecount,process,round, beers, cures,score
     reset_world()
     current_beercount = start
     current_curecount = start
@@ -198,6 +204,7 @@ def restart():
     round = 1
     beers = []
     cures = []
+    score.initial()
 
 open_canvas(WIDTH, HEIGHT)
 reset_world()
@@ -205,9 +212,11 @@ reset_world()
 # game loop
 running = True
 mx, my = 0, 0
+score = Score()
 while running:
 
     clear_canvas()
+
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -242,13 +251,27 @@ while running:
             handle_mouse_events(mx, my)
             if(collision == 1):
                 bottle_sound = Bottlesound()
+                score.score += 100
+                score.combo += 1
             else:
                 if(collision == 2):
                     gun_sound = Gunsound()  # Gunsound 객체 생성)
+                    score.score -= 50
+                    score.combo = 0
+                else:
+                    if (collision == 3):
+                        heal_sound = Heal()
+
             collision = 0
 
 
+
+    # clear_canvas() 호출 후 점수를 출력합니다.
+
     update_world()
+    if process == 1 or process == 2  or process == 3 :
+        score.draw()
+    update_canvas()
     delay(0.01)
 
 # finalization code

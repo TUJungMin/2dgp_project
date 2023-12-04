@@ -28,3 +28,12 @@ class BGM:
         self.bgm = load_wav('bgm.wav')
         self.bgm.set_volume(10)
         self.bgm.play(1)
+
+
+class Heal:
+    def __init__(self):
+        self.cw = get_canvas_width()
+        self.ch = get_canvas_height()
+        self.bgm = load_wav('healpack.wav')
+        self.bgm.set_volume(20)
+        self.bgm.play(1)
