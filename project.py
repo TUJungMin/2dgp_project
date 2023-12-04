@@ -1,5 +1,6 @@
 from pico2d import *
 from beer import Beer
+from cure import Cure
 import random
 from heart import Heart
 from gamesound import Gunsound,Bottlesound
@@ -15,16 +16,18 @@ round  = 1
 
 x_pos, y_pos = 0, 0
 beers = []  # 맥주병 객체들을 저장할 리스트
+cures = []
 beer_timer = 0
 beer_interval = 1  # 1초마다 맥주 생성
 beer_count = [0,10,20,30]
 current_beercount = 0
+current_curecount = 0
 
 hearts = []  # 하트 객체들을 저장할 리스트
 heart_size = 50  # 하트 크기
 heart_padding = 10  # 하트 간격
 heart_count = 3
-collision = False
+collision = 0
 
 def reset_world():
     global process, background, cursor
@@ -51,6 +54,8 @@ def render_world(mx, my):
     if process != 4:
         for beer in beers:
             beer.draw()
+        for cure in cures:  # Cure 객체들 그리기
+            cure.draw()
 
     # process가 1일 때, 화면 우측 상단에 하트 그리기
     if process != 0 and process != 4:
@@ -60,11 +65,15 @@ def render_world(mx, my):
     cursor.draw(mx, my, 100, 50)
     update_canvas()
 def update_world():
-    global beers,process,round,current_beercount
+    global beers,process,round,current_beercount,cures
     for beer in beers:
         beer.update()
         if beer.x < -100 or beer.x > WIDTH + 100:
             beers.remove(beer)
+    for cure in cures:
+        cure.update()
+        if cure.x < -100 or cure.x > WIDTH + 100:
+            cures.remove(cure)
             if len(beers) == 0:  # 맥주가 모두 사라졌을 때
                 if process != 4:  # 프로세스가 4가 아닐 때에만 실행
                     process += 1
@@ -98,7 +107,7 @@ def handle_mouse_events(mx, my):
 
             for clicked_beer in clicked_beers:
                 beers.remove(clicked_beer)
-                collision = True
+                collision = 1
 
             if len(beers) == 0:  # 맥주가 모두 사라졌을 때
                 if process != 4:  # 프로세스가 4가 아닐 때에만 실행
@@ -106,8 +115,6 @@ def handle_mouse_events(mx, my):
                     round += 1
                     current_beercount = 0
                     show_image_for_time('stage_clear.png', 2)
-
-MAX_BEER_COUNT = 10  # 최대 맥주 객체 개수
 
 def generate_beer():
     global beer_timer, round, current_beercount
@@ -121,6 +128,17 @@ def generate_beer():
             current_beercount += 1
         beer_timer = get_time()
 
+
+def generate_cure():
+    global current_curecount, round,beer_timer
+    if process != 0 and process != 4 and current_curecount < beer_count[round]:
+        direction = random.choice([1, 2])
+        if direction == 1:
+            cures.append(Cure(-100, random.randint(400, HEIGHT), direction, round))
+            current_curecount += 1
+        else:
+            cures.append(Cure(WIDTH + 100, random.randint(400, HEIGHT), direction, round))
+            current_curecount += 1
 
 def get_mouse_pos():
     global x_pos, y_pos
@@ -151,6 +169,7 @@ while running:
     if(process != 0):
         if get_time() - beer_timer > beer_interval:
             generate_beer()
+            generate_cure()
 
     update_world()
 
@@ -164,11 +183,12 @@ while running:
             # 왼쪽 마우스 버튼 클릭 시 맥주병 제거
             mx, my = get_mouse_pos()
             handle_mouse_events(mx, my)
-            if(collision):
+            if(collision == 1):
                 bottle_sound = Bottlesound()
             else:
-                gun_sound = Gunsound()  # Gunsound 객체 생성
-            collision = False
+                if(collision == 2):
+                    gun_sound = Gunsound()  # Gunsound 객체 생성)
+            collision = 0
 
     delay(0.01)
 
