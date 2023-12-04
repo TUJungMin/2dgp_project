@@ -20,6 +20,7 @@ class Cure:
 
     def draw(self):
         self.image.rotate_draw(radians(self.angle), self.x, self.y, 50, 50)
+        #draw_rectangle(self.x - 25, self.y - 25, self.x + 25, self.y + 25)  # 바운딩 박스를 그립니다. (크기는 50x50)
 
 
     def update(self):
