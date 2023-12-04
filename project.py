@@ -3,6 +3,7 @@ from beer import Beer
 import random
 from heart import Heart
 from gamesound import Gunsound,Bottlesound
+import time
 
 WIDTH, HEIGHT = 1200, 700  # 화면 크기
 map = 'map.jpg'  # 배경 사진 파일 경로
@@ -59,12 +60,27 @@ def render_world(mx, my):
     cursor.draw(mx, my, 100, 50)
     update_canvas()
 def update_world():
-    global beers
+    global beers,process,round,current_beercount
     for beer in beers:
         beer.update()
         if beer.x < -100 or beer.x > WIDTH + 100:
             beers.remove(beer)
+            if len(beers) == 0:  # 맥주가 모두 사라졌을 때
+                if process != 4:  # 프로세스가 4가 아닐 때에만 실행
+                    process += 1
+                    round += 1
+                    current_beercount = 0
+                    show_image_for_time('stage_clear.png', 2)
 
+def show_image_for_time(image_path, duration):
+    start_time = time.time()
+    image = load_image(image_path)
+
+    while time.time() - start_time < duration:
+
+        image.draw(WIDTH // 2, HEIGHT // 2,600,500)
+        update_canvas()
+        delay(0.01)
 def handle_mouse_events(mx, my):
     global process, hearts, current_beercount,round,collision
 
@@ -85,10 +101,11 @@ def handle_mouse_events(mx, my):
                 collision = True
 
             if len(beers) == 0:  # 맥주가 모두 사라졌을 때
-                process +=1
-                round +=1
-                current_beercount = 0
-
+                if process != 4:  # 프로세스가 4가 아닐 때에만 실행
+                    process += 1
+                    round += 1
+                    current_beercount = 0
+                    show_image_for_time('stage_clear.png', 2)
 
 MAX_BEER_COUNT = 10  # 최대 맥주 객체 개수
 

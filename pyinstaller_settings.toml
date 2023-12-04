@@ -3,7 +3,7 @@ main_file = 'project.py'
 
 # 데이타 파일들을 지정하세요.
 data_files = [
-    'gun.jpg','beer.py','map.jpg','beer.png','scope.png'
+    'gun.jpg','beer.py','map.jpg','beer.png','scope.png','heart.png','gunsound.wav','bottle_break.wav'
 ]
 
 # 데이타가 들어있는 폴더들을 지정하세요.

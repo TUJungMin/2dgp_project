@@ -14,9 +14,9 @@ class Beer:
         self.direction = direction
         self.round = round
         if self.direction == 1:
-            self.initial_velocity_x = 10  # 초기 속도 (왼쪽에서 오른쪽으로)
+            self.initial_velocity_x = 7  # 초기 속도 (왼쪽에서 오른쪽으로)
         else:
-            self.initial_velocity_x = -10 # 초기 속도 (오른쪽에서 왼쪽으로)
+            self.initial_velocity_x = -7 # 초기 속도 (오른쪽에서 왼쪽으로)
 
     def draw(self):
         self.image.rotate_draw(radians(self.angle), self.x, self.y, 300, 100)
@@ -24,7 +24,9 @@ class Beer:
 
     def update(self):
         gravity = 0.1  # 중력 가속도를 0으로 설정하여 직선 운동으로 변경
-        angle_radians = radians(self.angle)
+        self.angle += 5 * self.round
+        if self.angle > 360:
+            self.angle = 0
 
         self.x += self.initial_velocity_x * self.round
 
