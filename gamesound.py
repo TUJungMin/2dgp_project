@@ -19,3 +19,12 @@ class Bottlesound:
         self.bgm.set_volume(10)
         self.bgm.play(1)
 
+
+
+class BGM:
+    def __init__(self):
+        self.cw = get_canvas_width()
+        self.ch = get_canvas_height()
+        self.bgm = load_wav('bgm.wav')
+        self.bgm.set_volume(10)
+        self.bgm.play(1)
