@@ -37,3 +37,5 @@ class Heal:
         self.bgm = load_wav('healpack.wav')
         self.bgm.set_volume(20)
         self.bgm.play(1)
+
+
