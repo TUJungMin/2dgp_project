@@ -33,7 +33,7 @@ class Beer:
         self.x += self.initial_velocity_x * self.round * 1.5
         self.y += self.initial_velocity_y * self.round * 1.5
 
-        self.initial_velocity_y -= 0.1
+        self.initial_velocity_y -= 0.1 * self.round
 
 
     def is_clicked(self, mx, my):

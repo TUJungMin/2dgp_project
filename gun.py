@@ -30,25 +30,25 @@ class Revolver :
             self.reloading = False
 
     def draw(self):
-        if self.bullet ==6:
+        if self.bullet == 6:
             self.image.clip_draw(166, 0, 166, 166, self.x, self.y,100,100)
 
-        if self.bullet ==5:
+        if self.bullet == 5:
             self.image.clip_draw(332, 166, 166, 166, self.x, self.y,100,100)
 
-        if self.bullet ==4:
+        if self.bullet == 4:
             self.image.clip_draw(166, 166, 166, 166, self.x, self.y,100,100)
 
-        if self.bullet ==3:
+        if self.bullet == 3:
             self.image.clip_draw(0, 166, 166, 166, self.x, self.y,100,100)
 
-        if self.bullet ==2:
+        if self.bullet == 2:
             self.image.clip_draw(332, 332, 166, 166, self.x, self.y,100,100)
 
-        if self.bullet ==1:
+        if self.bullet == 1:
             self.image.clip_draw(166, 332, 166, 166, self.x, self.y,100,100)
 
-        if self.bullet ==0:
+        if self.bullet == 0:
             self.image.clip_draw(0, 332, 166, 166, self.x, self.y,100,100)
 
         if self.bullet == 0 and not self.reloading:

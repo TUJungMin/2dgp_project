@@ -102,8 +102,7 @@ def update_world():
             process += 1
             if (round < 3):
                 round += 1
-                gun.bullet = 6
-                revolver = 6
+
             show_image_for_time('stage_clear.png', 2)
             current_beercount = 0
     if process in [gameover,gameclear] and bgm:
@@ -255,7 +254,7 @@ while running:
                 if process in [1,2,3]:
                     gun.bullet -= 1
                     revolver.bullet -= 1
-
+                handle_mouse_events(mx, my)
                 if collision == 1:
                     bottle_sound = Bottlesound()
                     score.score += 100
@@ -271,7 +270,6 @@ while running:
 
 
                 gun.shooting = True
-                handle_mouse_events(mx, my)
 
             collision = 0
 
