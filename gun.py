@@ -68,8 +68,9 @@ class GunS:
         self.x = x
         self.y = y
         self.image = load_image('gun_sprite.png')
-        self.shooting = 0
+        self.shooting = False
         self.bullet = 6
+        self.frame = 0
         self.reloading = False
         self.reload_start_time = 0
 
@@ -87,16 +88,23 @@ class GunS:
             self.bullet = 6
             self.reloading = False
 
+        if self.shooting:
+            if self.frame < 3:
+                self.frame +=1
+            else:
+                self.frame = 0
+                self.shooting = False
+
     def draw(self,x,y):
         if x >0 and x < 500:
-            self.image.clip_draw(0 + 100 * self.shooting, 132 * 2, 100, 132, 600, 50, 150, 150)
+            self.image.clip_draw(0 + 100 * self.frame, 132 * 2, 100, 132, 600, 50, 150, 150)
         else:
             if 700<x and x<1200 :
-                self.image.clip_composite_draw(0 + 100 * self.shooting,132*2,100,132,0,'h',600,50,150,150)
+                self.image.clip_composite_draw(0 + 100 * self.frame,132*2,100,132,0,'h',600,50,150,150)
 
             else:
 
-                self.image.clip_draw(0 + 149 * self.shooting, 132 * 1, 149, 132, 600, 50, 150, 150)
+                self.image.clip_draw(0 + 149 * self.frame, 132 * 1, 149, 132, 600, 50, 150, 150)
 
         if self.bullet == 0 and not self.reloading:
             self.reload()

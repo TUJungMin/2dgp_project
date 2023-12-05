@@ -186,7 +186,7 @@ def generate_cure():
 
 
 def restart():
-    global  current_beercount, current_curecount,process,round, beers, cures,score,start_bgm,gun, bgm
+    global  current_beercount, current_curecount,process,round, beers, cures,score,start_bgm,gun, bgm,revolver
     reset_world()
     current_beercount = start
     current_curecount = start
@@ -197,6 +197,7 @@ def restart():
     cures = []
     score.initial()
     gun.bullet = 6
+    revolver.bullet = 6
 
     if bgm:
         bgm.stop()  # 현재 재생 중인 BGM 정지
@@ -265,6 +266,9 @@ while running:
                     else:
                         if collision == 3:
                             heal_sound = Heal()
+
+
+                gun.shooting = True
 
             collision = 0
 
