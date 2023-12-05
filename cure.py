@@ -13,10 +13,12 @@ class Cure:
         self.time = 0
         self.direction = direction
         self.round = round
+        self.initial_velocity_y = random.randint(3, 5)  # 초기 속도 (왼쪽에서 오른쪽으로)
+        self.initial_velocity_x = random.randint(7, 10)
         if self.direction == 1:
-            self.initial_velocity_x = 7  # 초기 속도 (왼쪽에서 오른쪽으로)
+            self.initial_velocity_x *= 1  # 초기 속도 (왼쪽에서 오른쪽으로)
         else:
-            self.initial_velocity_x = -7 # 초기 속도 (오른쪽에서 왼쪽으로)
+            self.initial_velocity_x *= -1  # 초기 속도 (오른쪽에서 왼쪽으로)
 
     def draw(self):
         self.image.rotate_draw(radians(self.angle), self.x, self.y, 50, 50)

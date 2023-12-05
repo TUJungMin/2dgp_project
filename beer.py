@@ -10,13 +10,14 @@ class Beer:
         self.y = y
         self.image = load_image(target_path)
         self.angle = 0  # 초기 회전 각도
-        self.time = 0
         self.direction = direction
         self.round = round
+        self.initial_velocity_y = random.randint(1,3)  # 초기 속도 (왼쪽에서 오른쪽으로)
+        self.initial_velocity_x = random.randint(7,10)
         if self.direction == 1:
-            self.initial_velocity_x = 7  # 초기 속도 (왼쪽에서 오른쪽으로)
+            self.initial_velocity_x *= 1  # 초기 속도 (왼쪽에서 오른쪽으로)
         else:
-            self.initial_velocity_x = -7 # 초기 속도 (오른쪽에서 왼쪽으로)
+            self.initial_velocity_x *= -1  # 초기 속도 (오른쪽에서 왼쪽으로)
 
     def draw(self):
 
@@ -30,10 +31,10 @@ class Beer:
             self.angle = 0
 
         self.x += self.initial_velocity_x * self.round * 1.5
+        self.y += self.initial_velocity_y * self.round * 1.5
 
+        self.initial_velocity_y -= 0.1
 
-
-        self.time += 0.1  # 시간 증가
 
     def is_clicked(self, mx, my):
         half_width = 30  # 바운딩 박스의 가로 길이의 절반
