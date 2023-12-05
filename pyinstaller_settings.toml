@@ -5,7 +5,7 @@ main_file = 'project.py'
 data_files = [
     'beer.png','bgm.wav','bottle_break.wav','cure.png','ENCR10B.TTF','gameclear.png','gameover.png'
     ,'gun.png','gunsound.wav','healpack.wav','heart.png','map.jpg','reload.wav','startscreen.png','stage_clear.png','gun_sprite.png'
-    ,'scope.png','score.py','gamesound.py','beer.py','cure.py','gun.py','heart.py','map.py'
+    ,'scope.png'
 ]
 
 # 데이타가 들어있는 폴더들을 지정하세요.
